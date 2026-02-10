@@ -1,0 +1,86 @@
+{
+  "providers": {
+    "openrouter": {
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "apiKey": "${OPENROUTER_API_KEY}",
+      "api": "openai-completions",
+      "models": [
+        {
+          "id": "arcee-ai/trinity-large-preview:free",
+          "name": "Trinity Large (Test)",
+          "reasoning": false,
+          "input": [
+            "text"
+          ],
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          },
+          "contextWindow": 32768,
+          "maxTokens": 8192
+        },
+        {
+          "id": "moonshotai/kimi-k2.5",
+          "name": "Kimi K2.5 (Fallback)",
+          "reasoning": false,
+          "input": [
+            "text"
+          ],
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          },
+          "contextWindow": 131072,
+          "maxTokens": 8192
+        },
+        {
+          "id": "deepseek/deepseek-v3.2",
+          "name": "DeepSeek v3.2",
+          "reasoning": false,
+          "input": [
+            "text"
+          ],
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          },
+          "contextWindow": 65536,
+          "maxTokens": 8192
+        }
+      ]
+    },
+    "xai": {
+      "baseUrl": "https://api.x.ai/v1",
+      "api": "openai-completions",
+      "models": [
+        {
+          "id": "grok-4",
+          "name": "Grok 4",
+          "reasoning": false,
+          "input": [
+            "text"
+          ],
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          },
+          "contextWindow": 131072,
+          "maxTokens": 8192
+        }
+      ],
+      "apiKey": "${XAI_API_KEY}"
+    },
+    "github-copilot": {
+      "baseUrl": "https://api.enterprise.githubcopilot.com",
+      "models": []
+    }
+  }
+}

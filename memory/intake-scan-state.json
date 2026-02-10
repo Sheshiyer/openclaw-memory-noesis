@@ -1,0 +1,33 @@
+{
+  "last_scan": "2026-02-04T08:31:42Z",
+  "processed_files": [],
+  "current_inventory": [
+    "_index.md",
+    "fooljourney-20260201/entryeight.md",
+    "fooljourney-20260201/entryseven.md",
+    "fooljourney-20260201/entrysix.md",
+    "fooljourney-20260201/entryzero.md",
+    "youtube-cleanup/triage-decisions-final.csv",
+    "youtube-cleanup/triage-decisions.csv",
+    "youtube-cleanup/yt watch later cleanup - Sheet1.csv",
+    "youtube-cleanup/yt-DELETE.txt",
+    "youtube-cleanup/yt-KEEP.txt",
+    "youtube-cleanup/yt-MUSIC-ARCHIVE.txt",
+    "youtube-cleanup/yt-batch-1.txt",
+    "youtube-cleanup/yt-batch-2.txt",
+    "youtube-cleanup/yt-batch-3.txt",
+    "youtube-cleanup/yt-batch-4.txt",
+    "youtube-cleanup/yt-batch-5.txt",
+    "youtube-cleanup/yt-batch-6.txt",
+    "youtube-cleanup/yt-cleanup-summary.md",
+    "youtube-cleanup/yt-playlist-ACTIVE.txt",
+    "youtube-cleanup/yt-playlist-CONTEMPLATIVE.txt",
+    "youtube-cleanup/yt-playlist-DISCOVERY.txt",
+    "youtube-cleanup/yt-playlist-HEALTH.txt",
+    "youtube-cleanup/yt-playlist-LEISURE.txt",
+    "youtube-cleanup/yt-playlist-REFERENCE.txt",
+    "youtube-cleanup/yt-step2-categorization.md",
+    "youtube-cleanup/yt-step2-complete.md",
+    "youtube-cleanup/yt-watch-later-cleanup-plan.md"
+  ]
+}
