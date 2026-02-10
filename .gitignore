@@ -14,3 +14,10 @@ build/
 # Agents
 **/auth-profiles.json
 **/sessions/
+
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
