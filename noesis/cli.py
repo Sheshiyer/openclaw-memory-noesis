@@ -304,6 +304,128 @@ def cmd_telemetry_stats(args: argparse.Namespace) -> int:
     return 0
 
 
+# ═══════════════════════════════════════════════════════════
+# Engine commands (Selemene)
+# ═══════════════════════════════════════════════════════════
+
+def cmd_engines(args: argparse.Namespace) -> int:
+    """Show Selemene engine dashboard."""
+    from noesis.telemetry import (
+        Engine, get_engine_tracker, get_engine_metadata,
+        format_engine_dashboard, format_engine_status
+    )
+    import json as json_module
+    
+    tracker = get_engine_tracker()
+    
+    if args.json:
+        summary = tracker.to_summary()
+        states = {e.value: tracker.get_state(e).to_dict() for e in Engine}
+        print(json_module.dumps({"summary": summary, "engines": states}, indent=2))
+        return 0
+    
+    # Filter by kosha if requested
+    if args.kosha:
+        engines = tracker.get_by_kosha(args.kosha)
+        if not engines:
+            print(f"No engines aligned with {args.kosha}")
+            return 1
+        
+        print(f"⚙️ Engines aligned with {args.kosha.upper()}")
+        print("=" * 50)
+        for state in engines:
+            if args.verbose:
+                print(format_engine_status(state))
+                print()
+            else:
+                meta = state.metadata
+                icon = meta.symbol
+                status = {"idle": "⚪", "calling": "🔄", "success": "✅", "error": "❌", "timeout": "⏱️"}.get(state.status, "❓")
+                print(f"  {icon} {meta.name:20} {status} {state.call_count} calls")
+        return 0
+    
+    # Full dashboard
+    print(format_engine_dashboard())
+    
+    if args.verbose:
+        print()
+        for engine in Engine:
+            state = tracker.get_state(engine)
+            print(format_engine_status(state))
+            print()
+    
+    return 0
+
+
+def cmd_engine_detail(args: argparse.Namespace) -> int:
+    """Show details for a single engine."""
+    from noesis.telemetry import (
+        Engine, get_engine_tracker, get_engine_metadata, format_engine_status
+    )
+    import json as json_module
+    
+    # Find engine by name
+    try:
+        engine = Engine(args.name)
+    except ValueError:
+        # Try partial match
+        matches = [e for e in Engine if args.name.lower() in e.value.lower()]
+        if len(matches) == 1:
+            engine = matches[0]
+        elif len(matches) > 1:
+            print(f"Ambiguous engine name '{args.name}'. Matches: {', '.join(e.value for e in matches)}")
+            return 1
+        else:
+            print(f"Unknown engine '{args.name}'. Available: {', '.join(e.value for e in Engine)}")
+            return 1
+    
+    tracker = get_engine_tracker()
+    state = tracker.get_state(engine)
+    meta = state.metadata
+    
+    if args.json:
+        data = {
+            **state.to_dict(),
+            "metadata": {
+                "name": meta.name,
+                "kosha_layer": meta.kosha_layer,
+                "description": meta.description,
+                "requires_birth_data": meta.requires_birth_data,
+                "requires_birth_time": meta.requires_birth_time,
+                "requires_location": meta.requires_location,
+                "api_path": meta.api_path,
+                "kernel_refs": meta.kernel_refs,
+            }
+        }
+        print(json_module.dumps(data, indent=2))
+        return 0
+    
+    # Detailed output
+    print(f"{meta.symbol} {meta.name}")
+    print("=" * 50)
+    print(f"  Engine ID: {engine.value}")
+    print(f"  Kosha Layer: {meta.kosha_layer.capitalize()}")
+    print(f"  Description: {meta.description}")
+    print()
+    print(f"  Status: {state.status.upper()}")
+    print(f"  Calls: {state.call_count} (errors: {state.error_count})")
+    if state.last_called:
+        print(f"  Last Called: {state.last_called.strftime('%Y-%m-%d %H:%M:%S')}")
+    if state.avg_latency_ms > 0:
+        print(f"  Avg Latency: {state.avg_latency_ms:.0f}ms")
+    print()
+    print("  Requirements:")
+    print(f"    Birth Data: {'✓' if meta.requires_birth_data else '✗'}")
+    print(f"    Birth Time: {'✓' if meta.requires_birth_time else '✗'}")
+    print(f"    Location: {'✓' if meta.requires_location else '✗'}")
+    print()
+    print(f"  API Path: {meta.api_path}")
+    if meta.kernel_refs:
+        print(f"  Kernel Refs: {', '.join(meta.kernel_refs)}")
+    
+    return 0
+
+
 def create_parser() -> argparse.ArgumentParser:
     """Create the argument parser with all subcommands."""
     parser = argparse.ArgumentParser(
@@ -458,6 +580,23 @@ Examples:
     tele_stats.add_argument("--since", default="1 hour ago", help="Time range")
     tele_stats.add_argument("--json", action="store_true", help="Output as JSON")
     tele_stats.set_defaults(func=cmd_telemetry_stats)
+    
+    # ═══════════════════════════════════════════════════════════
+    # Engine commands (Selemene)
+    # ═══════════════════════════════════════════════════════════
+    
+    # engines (main command)
+    engines_parser = subparsers.add_parser("engines", help="Selemene engine status")
+    engines_parser.add_argument("--json", action="store_true", help="Output as JSON")
+    engines_parser.add_argument("--kosha", "-k", help="Filter by kosha layer")
+    engines_parser.add_argument("--verbose", "-v", action="store_true", help="Show full details")
+    engines_parser.set_defaults(func=cmd_engines)
+    
+    # engine (info on single engine)
+    engine_parser = subparsers.add_parser("engine", help="Single engine details")
+    engine_parser.add_argument("name", help="Engine name (e.g., panchanga, biorhythm)")
+    engine_parser.add_argument("--json", action="store_true", help="Output as JSON")
+    engine_parser.set_defaults(func=cmd_engine_detail)
     
     return parser
 

@@ -49,6 +49,8 @@ from .emitter import (
     emit_think,
     emit_vikara,
     emit_khaloree,
+    emit_engine_call,
+    emit_workflow_call,
     init_session,
     end_session,
     get_session_id,
@@ -87,6 +89,19 @@ from .temporal import (
     format_moon_phase,
 )
 
+from .engines import (
+    Engine,
+    EngineMetadata,
+    EngineState,
+    EngineTracker,
+    ENGINE_REGISTRY,
+    get_engine_tracker,
+    get_engine_metadata,
+    list_engines_by_kosha,
+    format_engine_status,
+    format_engine_dashboard,
+)
+
 __all__ = [
     # Schema
     "PranaEvent",
@@ -105,6 +120,8 @@ __all__ = [
     "emit_think",
     "emit_vikara",
     "emit_khaloree",
+    "emit_engine_call",
+    "emit_workflow_call",
     "init_session",
     "end_session",
     "get_session_id",
@@ -138,4 +155,16 @@ __all__ = [
     "get_temporal_state",
     "format_clifford_clock",
     "format_moon_phase",
+    
+    # Engines
+    "Engine",
+    "EngineMetadata",
+    "EngineState",
+    "EngineTracker",
+    "ENGINE_REGISTRY",
+    "get_engine_tracker",
+    "get_engine_metadata",
+    "list_engines_by_kosha",
+    "format_engine_status",
+    "format_engine_dashboard",
 ]

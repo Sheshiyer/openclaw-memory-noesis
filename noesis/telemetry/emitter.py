@@ -242,6 +242,69 @@ def emit_khaloree(delta: int, reason: str) -> PranaEvent:
                 kosha_layer="pranamaya", khalorēē_delta=delta)
 
 
+def emit_engine_call(
+    engine_name: str,
+    success: bool,
+    latency_ms: float,
+    result_summary: Optional[str] = None
+) -> PranaEvent:
+    """
+    Emit a Selemene engine API call event.
+    
+    Also updates the engine tracker state.
+    """
+    from .engines import Engine, get_engine_tracker, get_engine_metadata
+    
+    # Convert string to Engine enum
+    try:
+        engine = Engine(engine_name)
+    except ValueError:
+        engine = None
+    
+    # Get metadata for kosha mapping
+    if engine:
+        metadata = get_engine_metadata(engine)
+        kosha = metadata.kosha_layer
+        
+        # Update tracker
+        tracker = get_engine_tracker()
+        tracker.record_call(engine, success, latency_ms)
+    else:
+        kosha = "pranamaya"  # Default for unknown engines
+    
+    guna = "sattvic" if success else "tamasic"
+    khaloree = 2 if success else -3  # +2 for successful API, -3 for failure
+    
+    payload = {
+        "engine": engine_name,
+        "success": success,
+        "latency_ms": latency_ms,
+    }
+    if result_summary:
+        payload["summary"] = result_summary
+    
+    return emit("engine_call", payload, 
+                kosha_layer=kosha, guna_state=guna, khalorēē_delta=khaloree)
+
+
+def emit_workflow_call(
+    workflow_name: str,
+    engines_used: list,
+    success: bool,
+    total_latency_ms: float
+) -> PranaEvent:
+    """Emit a Selemene workflow execution event."""
+    guna = "sattvic" if success else "tamasic"
+    khaloree = 5 if success else -5  # Higher stakes for workflows
+    
+    return emit("workflow_call", {
+        "workflow": workflow_name,
+        "engines": engines_used,
+        "success": success,
+        "latency_ms": total_latency_ms,
+    }, kosha_layer="vijnanamaya", guna_state=guna, khalorēē_delta=khaloree)
+
+
 @contextmanager
 def session(agent_id: Optional[str] = None, metadata: Optional[Dict] = None):
     """Context manager for a telemetry session."""

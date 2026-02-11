@@ -45,6 +45,8 @@ EVENT_ICONS = {
     "khalorēē": "💫",
     "session.start": "🚀",
     "session.end": "🏁",
+    "engine_call": "⚙️",
+    "workflow_call": "🔄",
 }
 
 # Guna colors/icons
@@ -257,6 +259,37 @@ class PranaTUI:
         
         return Panel(text, title="📊 Statistics", box=box.ROUNDED)
     
+    def _build_engines_panel(self) -> Panel:
+        """Build the Selemene engines status panel."""
+        try:
+            from .engines import get_engine_tracker, Engine
+            tracker = get_engine_tracker()
+            active = tracker.get_active_engines()
+            summary = tracker.to_summary()
+        except Exception:
+            text = Text("Engines unavailable", style="dim")
+            return Panel(text, title="⚙️ Engines", box=box.ROUNDED)
+        
+        text = Text()
+        
+        # Summary line
+        text.append(f"Active: {summary['active_engines']}/{summary['total_engines']}\n", style="bold")
+        
+        # Show active engines with compact status
+        if active:
+            for state in active[:4]:  # Show top 4
+                meta = state.metadata
+                status_icon = {
+                    "idle": "⚪", "calling": "🔄", 
+                    "success": "✅", "error": "❌", "timeout": "⏱️"
+                }.get(state.status, "❓")
+                text.append(f"{meta.symbol} {status_icon} ", style="dim")
+                text.append(f"{state.call_count}\n", style="cyan")
+        else:
+            text.append("\nNo calls yet", style="dim")
+        
+        return Panel(text, title="⚙️ Engines", box=box.ROUNDED)
+    
     def _build_layout(self) -> Layout:
         """Build the full layout."""
         layout = Layout()
@@ -275,6 +308,7 @@ class PranaTUI:
         layout["sidebar"].split(
             Layout(name="khaloree", size=5),
             Layout(name="guna", size=8),
+            Layout(name="engines", size=8),
             Layout(name="stats")
         )
         
@@ -283,6 +317,7 @@ class PranaTUI:
         layout["main"].update(self._build_events_table())
         layout["khaloree"].update(self._build_khaloree_gauge())
         layout["guna"].update(self._build_guna_indicator())
+        layout["engines"].update(self._build_engines_panel())
         layout["stats"].update(self._build_stats_panel())
         
         footer_text = Text()
