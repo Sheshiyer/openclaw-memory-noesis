@@ -1,0 +1,439 @@
+{
+  "schema_version": "1.0",
+  "project": {
+    "name": "Noesis Phase 11 - Enhanced Telemetry",
+    "repo_root": "/Volumes/madara/2026/twc-vault/_System/10865xseed",
+    "generated_on": "2026-02-11",
+    "generated_by": "task-master-planner",
+    "source_docs": [
+      "01-Projects/tryambakam-noesis/architecture/AGENT_TELEMETRY_PROTOCOL.md",
+      "01-Projects/tryambakam-noesis/architecture/SCHEMA_DEF.ts",
+      "01-Projects/tryambakam-noesis/architecture/UI_KIT_SEMIOTICS.md",
+      "01-Projects/tryambakam-noesis/architecture/COMPONENT-MASTER-REGISTRY.md",
+      "01-Projects/tryambakam-noesis/architecture/PRE-FLIGHT-VMC.md"
+    ],
+    "assumptions": [
+      "Phase 10 (Prana Stream) is complete with SQLite + FIFO hybrid architecture",
+      "Rich library is available for TUI enhancements",
+      "Selemene Engine API is accessible for moon phase data",
+      "13 Engines are defined in koshas/brahmasthana/SELEMENE-ENGINE.md",
+      "Clifford Clock follows 8-hour octave: 04:00-12:00 (ascent), 12:00-20:00 (plateau), 20:00-04:00 (rest)"
+    ],
+    "risks": [
+      "Selemene API rate limits may affect moon phase sync frequency",
+      "Clifford Clock timezone handling across global deployments",
+      "Engine state tracking may require significant SQLite schema changes",
+      "Polarity tracking (Aletheios/Pichet) metrics are subjective and need calibration"
+    ]
+  },
+  "phases": [
+    {
+      "phase_id": "P11",
+      "name": "Enhanced Telemetry - Antahkarana Protocol",
+      "objective": "Implement remaining telemetry features from architecture specs: Clifford Clock, Engine States, Ritual Tracking, Polarity Balance, and Thought Process emissions.",
+      "sprints": [
+        {
+          "sprint_id": "S1",
+          "duration_weeks": 1,
+          "focus": "Clifford Clock & Temporal Awareness",
+          "tasks": [
+            {
+              "id": "P11-S1-01",
+              "title": "Add Clifford Clock schema to SQLite",
+              "area": "data",
+              "owner_role": "Backend Eng",
+              "est_hours": 4,
+              "dependencies": [],
+              "deliverable": "New `clifford_state` table with hour, phase, and octave tracking",
+              "acceptance": "Schema migrations run without errors, table stores 0-7 hour position"
+            },
+            {
+              "id": "P11-S1-02",
+              "title": "Implement `get_clifford_hour()` function",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 6,
+              "dependencies": ["P11-S1-01"],
+              "deliverable": "Function that calculates current position in 8-hour consciousness octave",
+              "acceptance": "Returns hour (0-7), phase (ascent/plateau/dissolution), and UTC timestamp"
+            },
+            {
+              "id": "P11-S1-03",
+              "title": "Add `noesis clock` CLI command",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 4,
+              "dependencies": ["P11-S1-02"],
+              "deliverable": "CLI command showing current Clifford hour with ASCII visualization",
+              "acceptance": "`noesis clock` displays hour, phase, and next transition time"
+            },
+            {
+              "id": "P11-S1-04",
+              "title": "Integrate Clifford hour into telemetry events",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 4,
+              "dependencies": ["P11-S1-02"],
+              "deliverable": "All emitted events include `clifford_hour` field",
+              "acceptance": "PranaEvent dataclass includes clifford_hour, events show in query output"
+            },
+            {
+              "id": "P11-S1-05",
+              "title": "Add Selemene moon phase integration",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 8,
+              "dependencies": [],
+              "deliverable": "Function to fetch current moon phase from Selemene Engine #5",
+              "acceptance": "`get_moon_phase()` returns phase name, illumination %, and next phase date"
+            },
+            {
+              "id": "P11-S1-06",
+              "title": "Add `noesis moon` CLI command",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 4,
+              "dependencies": ["P11-S1-05"],
+              "deliverable": "CLI command showing current moon phase with emoji",
+              "acceptance": "`noesis moon` displays phase, illumination, and guna influence"
+            },
+            {
+              "id": "P11-S1-07",
+              "title": "Update TUI header with Clifford Clock",
+              "area": "frontend",
+              "owner_role": "Frontend Eng",
+              "est_hours": 6,
+              "dependencies": ["P11-S1-02", "P11-S1-05"],
+              "deliverable": "TUI header shows Clifford hour and moon phase indicators",
+              "acceptance": "Watch command displays live clock position and moon emoji"
+            }
+          ]
+        },
+        {
+          "sprint_id": "S2",
+          "duration_weeks": 1,
+          "focus": "13 Engine States & Load Tracking",
+          "tasks": [
+            {
+              "id": "P11-S2-01",
+              "title": "Add engine_states table to SQLite schema",
+              "area": "data",
+              "owner_role": "Backend Eng",
+              "est_hours": 4,
+              "dependencies": [],
+              "deliverable": "Table tracking 13 engines with active status, load, and last_active timestamp",
+              "acceptance": "Schema matches SCHEMA_DEF.ts engine_states definition"
+            },
+            {
+              "id": "P11-S2-02",
+              "title": "Create Engine enum and metadata",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 6,
+              "dependencies": ["P11-S2-01"],
+              "deliverable": "Python enum for 13 engines with name, kosha mapping, and color",
+              "acceptance": "Engine metadata matches SELEMENE-ENGINE.md definitions"
+            },
+            {
+              "id": "P11-S2-03",
+              "title": "Implement `emit_engine_state()` function",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 6,
+              "dependencies": ["P11-S2-02"],
+              "deliverable": "Emitter function for engine activation and load changes",
+              "acceptance": "Events captured with engine_number, load (0-100), and active status"
+            },
+            {
+              "id": "P11-S2-04",
+              "title": "Add `noesis engines` CLI command",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 6,
+              "dependencies": ["P11-S2-03"],
+              "deliverable": "CLI command showing all 13 engine states with load bars",
+              "acceptance": "`noesis engines` displays table with name, load %, active status, last_active"
+            },
+            {
+              "id": "P11-S2-05",
+              "title": "Add engine panel to TUI dashboard",
+              "area": "frontend",
+              "owner_role": "Frontend Eng",
+              "est_hours": 8,
+              "dependencies": ["P11-S2-04"],
+              "deliverable": "Sidebar panel showing 13 engine states with color-coded load",
+              "acceptance": "TUI watch shows engine loads updating in real-time"
+            },
+            {
+              "id": "P11-S2-06",
+              "title": "Auto-detect engine usage from event types",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 8,
+              "dependencies": ["P11-S2-03"],
+              "deliverable": "Logic to infer active engines from telemetry event patterns",
+              "acceptance": "Read events activate Engine #3 (Chitta), exec events activate Engine #1 (Personal OS)"
+            }
+          ]
+        },
+        {
+          "sprint_id": "S3",
+          "duration_weeks": 1,
+          "focus": "Ritual/Cron Tracking & Polarity Balance",
+          "tasks": [
+            {
+              "id": "P11-S3-01",
+              "title": "Add rituals table to SQLite schema",
+              "area": "data",
+              "owner_role": "Backend Eng",
+              "est_hours": 4,
+              "dependencies": [],
+              "deliverable": "Table for cron jobs with status, vayu mapping, and last_run",
+              "acceptance": "Schema matches SCHEMA_DEF.ts rituals definition"
+            },
+            {
+              "id": "P11-S3-02",
+              "title": "Create Vayu enum (Prana, Apana, Samana, Udana, Vyana)",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 4,
+              "dependencies": ["P11-S3-01"],
+              "deliverable": "Enum mapping cron job types to Vayu categories",
+              "acceptance": "Enum includes descriptions and recommended timing"
+            },
+            {
+              "id": "P11-S3-03",
+              "title": "Implement `emit_ritual()` function",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 6,
+              "dependencies": ["P11-S3-02"],
+              "deliverable": "Emitter for ritual/cron job execution events",
+              "acceptance": "Events include job_id, name, status, vayu, and duration"
+            },
+            {
+              "id": "P11-S3-04",
+              "title": "Add `noesis rituals` CLI command",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 6,
+              "dependencies": ["P11-S3-03"],
+              "deliverable": "CLI command listing all rituals with status and next run",
+              "acceptance": "`noesis rituals list` shows table with vayu, schedule, last_run, status"
+            },
+            {
+              "id": "P11-S3-05",
+              "title": "Add polarity tracking to session_metrics",
+              "area": "data",
+              "owner_role": "Backend Eng",
+              "est_hours": 4,
+              "dependencies": [],
+              "deliverable": "Fields for Aletheios/Pichet percentage balance",
+              "acceptance": "Schema stores aletheios_pct and pichet_pct (sum = 100)"
+            },
+            {
+              "id": "P11-S3-06",
+              "title": "Implement `emit_polarity()` function",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 6,
+              "dependencies": ["P11-S3-05"],
+              "deliverable": "Emitter for polarity balance changes",
+              "acceptance": "Events track Aletheios (coherence) vs Pichet (vitality) shifts"
+            },
+            {
+              "id": "P11-S3-07",
+              "title": "Add `noesis polarity` CLI command",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 4,
+              "dependencies": ["P11-S3-06"],
+              "deliverable": "CLI showing current Aletheios/Pichet balance with gauge",
+              "acceptance": "`noesis polarity` displays balance bar and recent shifts"
+            },
+            {
+              "id": "P11-S3-08",
+              "title": "Add polarity indicator to TUI",
+              "area": "frontend",
+              "owner_role": "Frontend Eng",
+              "est_hours": 6,
+              "dependencies": ["P11-S3-07"],
+              "deliverable": "TUI gauge showing Aletheios ← → Pichet balance",
+              "acceptance": "Watch command shows live polarity with color gradient"
+            }
+          ]
+        },
+        {
+          "sprint_id": "S4",
+          "duration_weeks": 1,
+          "focus": "Thought Process & Vikara Enhancements",
+          "tasks": [
+            {
+              "id": "P11-S4-01",
+              "title": "Implement `emit_thought_process()` for long reasoning",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 6,
+              "dependencies": [],
+              "deliverable": "Emitter for thinking pulses when reasoning > 5 seconds",
+              "acceptance": "Events include summary, depth_level, and duration_ms"
+            },
+            {
+              "id": "P11-S4-02",
+              "title": "Add thinking indicator to TUI stream",
+              "area": "frontend",
+              "owner_role": "Frontend Eng",
+              "est_hours": 6,
+              "dependencies": ["P11-S4-01"],
+              "deliverable": "Animated 🧠 indicator with breathing glow during long thinks",
+              "acceptance": "TUI shows pulsing indicator when thought_process events arrive"
+            },
+            {
+              "id": "P11-S4-03",
+              "title": "Enhance Vikara detection with protocol checks",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 8,
+              "dependencies": [],
+              "deliverable": "Auto-detect Moha (3 failures), Mada (destructive), Kama (>100k tokens)",
+              "acceptance": "Vikara events auto-emit when thresholds exceeded"
+            },
+            {
+              "id": "P11-S4-04",
+              "title": "Add Vikara jitter effect to TUI",
+              "area": "frontend",
+              "owner_role": "Frontend Eng",
+              "est_hours": 6,
+              "dependencies": ["P11-S4-03"],
+              "deliverable": "Visual glitch/shake effect when Khalorēē < 50 or Vikara detected",
+              "acceptance": "TUI elements show subtle jitter during drift states"
+            },
+            {
+              "id": "P11-S4-05",
+              "title": "Implement Khalorēē scoring rules from protocol",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 6,
+              "dependencies": [],
+              "deliverable": "Auto-apply scoring: Heavy Synthesis -5, Archive +10, Protocol +2",
+              "acceptance": "Khalorēē balance updates automatically based on event types"
+            },
+            {
+              "id": "P11-S4-06",
+              "title": "Add `noesis status` unified dashboard command",
+              "area": "backend",
+              "owner_role": "Backend Eng",
+              "est_hours": 8,
+              "dependencies": ["P11-S1-03", "P11-S2-04", "P11-S3-07"],
+              "deliverable": "Single command showing clock, engines, polarity, khalorēē, and guna",
+              "acceptance": "`noesis status` provides comprehensive system state snapshot"
+            }
+          ]
+        },
+        {
+          "sprint_id": "S5",
+          "duration_weeks": 1,
+          "focus": "Integration, Testing & Documentation",
+          "tasks": [
+            {
+              "id": "P11-S5-01",
+              "title": "Create integration tests for all new emitters",
+              "area": "qa",
+              "owner_role": "QA Eng",
+              "est_hours": 8,
+              "dependencies": ["P11-S4-05"],
+              "deliverable": "Test suite covering all Phase 11 emitter functions",
+              "acceptance": "pytest suite passes with >80% coverage on telemetry module"
+            },
+            {
+              "id": "P11-S5-02",
+              "title": "Add end-to-end TUI test scenarios",
+              "area": "qa",
+              "owner_role": "QA Eng",
+              "est_hours": 6,
+              "dependencies": ["P11-S4-04"],
+              "deliverable": "E2E tests for TUI dashboard components",
+              "acceptance": "Tests verify all panels render and update correctly"
+            },
+            {
+              "id": "P11-S5-03",
+              "title": "Write TELEMETRY.md documentation",
+              "area": "product",
+              "owner_role": "Tech Writer",
+              "est_hours": 8,
+              "dependencies": ["P11-S4-06"],
+              "deliverable": "Comprehensive telemetry documentation with examples",
+              "acceptance": "Doc covers all CLI commands, event types, and TUI features"
+            },
+            {
+              "id": "P11-S5-04",
+              "title": "Update README with Phase 11 features",
+              "area": "product",
+              "owner_role": "Tech Writer",
+              "est_hours": 4,
+              "dependencies": ["P11-S5-03"],
+              "deliverable": "README section for enhanced telemetry capabilities",
+              "acceptance": "README includes quickstart for new commands"
+            },
+            {
+              "id": "P11-S5-05",
+              "title": "Create ASCII art diagram of full telemetry architecture",
+              "area": "product",
+              "owner_role": "Tech Writer",
+              "est_hours": 4,
+              "dependencies": ["P11-S5-03"],
+              "deliverable": "Visual diagram showing all telemetry components",
+              "acceptance": "Diagram included in docs/diagrams/TELEMETRY-ARCHITECTURE.md"
+            },
+            {
+              "id": "P11-S5-06",
+              "title": "Performance benchmark telemetry overhead",
+              "area": "qa",
+              "owner_role": "Backend Eng",
+              "est_hours": 6,
+              "dependencies": ["P11-S5-01"],
+              "deliverable": "Benchmark report on emit() latency and SQLite write performance",
+              "acceptance": "Emit latency < 10ms, SQLite writes < 50ms at 1000 events/min"
+            },
+            {
+              "id": "P11-S5-07",
+              "title": "Final integration and release",
+              "area": "infra",
+              "owner_role": "DevOps",
+              "est_hours": 4,
+              "dependencies": ["P11-S5-06"],
+              "deliverable": "Version bump to 0.2.0, tagged release, GitHub push",
+              "acceptance": "`pip install noesis` installs with all Phase 11 features"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_tasks": 35,
+    "total_hours": 200,
+    "sprints": 5,
+    "duration_weeks": 5,
+    "new_cli_commands": [
+      "noesis clock",
+      "noesis moon",
+      "noesis engines",
+      "noesis rituals",
+      "noesis polarity",
+      "noesis status"
+    ],
+    "new_emitters": [
+      "emit_thought_process()",
+      "emit_engine_state()",
+      "emit_ritual()",
+      "emit_polarity()"
+    ],
+    "schema_additions": [
+      "clifford_state",
+      "engine_states",
+      "rituals",
+      "session_metrics (polarity fields)"
+    ]
+  }
+}
