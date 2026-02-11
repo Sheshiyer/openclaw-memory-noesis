@@ -171,6 +171,39 @@ class PranaTUI:
         
         return Panel(text, title="🎭 Guna State", box=box.ROUNDED)
     
+    def _build_polarity_panel(self) -> Panel:
+        """Build the polarity (Guardrail Dyad) panel."""
+        try:
+            from .rituals import get_polarity
+            state = get_polarity()
+        except Exception:
+            text = Text("Polarity unavailable", style="dim")
+            return Panel(text, title="⚖️ Polarity", box=box.ROUNDED)
+        
+        text = Text()
+        
+        # Mini gauge
+        aletheios_chars = int(state.aletheios_pct / 10)  # 10 chars total
+        pichet_chars = 10 - aletheios_chars
+        
+        text.append("A ", style="cyan")
+        text.append("█" * aletheios_chars, style="cyan")
+        text.append("│", style="dim")
+        text.append("█" * pichet_chars, style="magenta")
+        text.append(" P\n", style="magenta")
+        
+        text.append(f"{state.aletheios_pct:.0f}%", style="cyan")
+        text.append(" / ", style="dim")
+        text.append(f"{state.pichet_pct:.0f}%", style="magenta")
+        
+        # Status
+        if state.is_balanced:
+            text.append("\n✓ Balanced", style="green")
+        else:
+            text.append(f"\n→ {state.dominant}", style="yellow")
+        
+        return Panel(text, title="⚖️ Polarity", box=box.ROUNDED)
+    
     def _build_events_table(self) -> Panel:
         """Build the events table."""
         table = Table(
@@ -307,6 +340,7 @@ class PranaTUI:
         
         layout["sidebar"].split(
             Layout(name="khaloree", size=5),
+            Layout(name="polarity", size=6),
             Layout(name="guna", size=8),
             Layout(name="engines", size=8),
             Layout(name="stats")
@@ -316,6 +350,7 @@ class PranaTUI:
         layout["header"].update(self._build_header())
         layout["main"].update(self._build_events_table())
         layout["khaloree"].update(self._build_khaloree_gauge())
+        layout["polarity"].update(self._build_polarity_panel())
         layout["guna"].update(self._build_guna_indicator())
         layout["engines"].update(self._build_engines_panel())
         layout["stats"].update(self._build_stats_panel())

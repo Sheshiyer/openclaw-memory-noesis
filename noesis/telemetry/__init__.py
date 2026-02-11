@@ -102,6 +102,23 @@ from .engines import (
     format_engine_dashboard,
 )
 
+from .rituals import (
+    Vayu,
+    Upavayu,
+    VayuMetadata,
+    VAYU_REGISTRY,
+    RitualType,
+    Ritual,
+    PolarityState,
+    RitualTracker,
+    get_polarity,
+    shift_polarity,
+    get_ritual_tracker,
+    format_vayu_list,
+    format_polarity_gauge,
+    format_ritual_list,
+)
+
 __all__ = [
     # Schema
     "PranaEvent",
@@ -167,4 +184,20 @@ __all__ = [
     "list_engines_by_kosha",
     "format_engine_status",
     "format_engine_dashboard",
+    
+    # Rituals & Polarity
+    "Vayu",
+    "Upavayu",
+    "VayuMetadata",
+    "VAYU_REGISTRY",
+    "RitualType",
+    "Ritual",
+    "PolarityState",
+    "RitualTracker",
+    "get_polarity",
+    "shift_polarity",
+    "get_ritual_tracker",
+    "format_vayu_list",
+    "format_polarity_gauge",
+    "format_ritual_list",
 ]

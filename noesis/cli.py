@@ -426,6 +426,125 @@ def cmd_engine_detail(args: argparse.Namespace) -> int:
     return 0
 
 
+# ═══════════════════════════════════════════════════════════
+# Ritual & Polarity commands
+# ═══════════════════════════════════════════════════════════
+
+def cmd_rituals(args: argparse.Namespace) -> int:
+    """Show ritual/cron history."""
+    from noesis.telemetry import (
+        get_ritual_tracker, format_ritual_list, Vayu, RitualType
+    )
+    import json as json_module
+    
+    tracker = get_ritual_tracker()
+    
+    # Filter rituals
+    if args.vayu:
+        try:
+            vayu = Vayu(args.vayu)
+            rituals = tracker.get_by_vayu(vayu)
+        except ValueError:
+            print(f"Unknown vayu: {args.vayu}. Options: {', '.join(v.value for v in Vayu)}")
+            return 1
+    elif args.type:
+        try:
+            rtype = RitualType(args.type)
+            rituals = tracker.get_by_type(rtype)
+        except ValueError:
+            print(f"Unknown type: {args.type}. Options: {', '.join(t.value for t in RitualType)}")
+            return 1
+    elif args.today:
+        rituals = tracker.get_today()
+    else:
+        rituals = tracker.get_recent(args.limit)
+    
+    if args.json:
+        data = {
+            "summary": tracker.to_summary(),
+            "rituals": [r.to_dict() for r in rituals]
+        }
+        print(json_module.dumps(data, indent=2))
+        return 0
+    
+    # Summary first
+    summary = tracker.to_summary()
+    print(f"📿 Ritual Tracker")
+    print(f"{'═' * 50}")
+    print(f"  Today: {summary['today_success']}✅ {summary['today_failed']}❌ │ Khalorēē: {summary['total_khalorēē_delta']:+d}")
+    print()
+    
+    # Ritual list
+    print(format_ritual_list(rituals, args.limit))
+    
+    return 0
+
+
+def cmd_vayus(args: argparse.Namespace) -> int:
+    """Show the 5 Vayus (vital airs)."""
+    from noesis.telemetry import Vayu, VAYU_REGISTRY, format_vayu_list
+    import json as json_module
+    
+    if args.json:
+        data = {
+            v.value: {
+                "name": m.name,
+                "location": m.location,
+                "function": m.function,
+                "breathwork": m.breathwork,
+                "kosha_effect": m.kosha_effect,
+            }
+            for v, m in VAYU_REGISTRY.items()
+        }
+        print(json_module.dumps(data, indent=2))
+        return 0
+    
+    print(format_vayu_list())
+    
+    # If specific vayu requested
+    if args.name:
+        try:
+            vayu = Vayu(args.name)
+            meta = VAYU_REGISTRY[vayu]
+            print()
+            print(f"{meta.symbol} {meta.name} Details")
+            print(f"{'─' * 40}")
+            print(f"  Location: {meta.location}")
+            print(f"  Function: {meta.function}")
+            print(f"  Breathwork: {meta.breathwork}")
+            print(f"  Kosha Effect: {meta.kosha_effect}")
+        except ValueError:
+            print(f"\nUnknown vayu: {args.name}")
+            return 1
+    
+    return 0
+
+
+def cmd_polarity(args: argparse.Namespace) -> int:
+    """Show Guardrail Dyad balance."""
+    from noesis.telemetry import get_polarity, shift_polarity, format_polarity_gauge
+    import json as json_module
+    
+    # Handle shift command
+    if args.shift:
+        if args.shift not in ("aletheios", "pichet"):
+            print(f"Invalid shift target: {args.shift}. Use 'aletheios' or 'pichet'")
+            return 1
+        amount = args.amount if hasattr(args, 'amount') and args.amount else 5.0
+        shift_polarity(args.shift, amount, args.reason or "manual adjustment")
+        print(f"✓ Shifted polarity toward {args.shift} by {amount}%")
+    
+    state = get_polarity()
+    
+    if args.json:
+        print(json_module.dumps(state.to_dict(), indent=2))
+        return 0
+    
+    print(format_polarity_gauge(state))
+    
+    return 0
+
+
 def create_parser() -> argparse.ArgumentParser:
     """Create the argument parser with all subcommands."""
     parser = argparse.ArgumentParser(
@@ -597,6 +716,33 @@ Examples:
     engine_parser.add_argument("name", help="Engine name (e.g., panchanga, biorhythm)")
     engine_parser.add_argument("--json", action="store_true", help="Output as JSON")
     engine_parser.set_defaults(func=cmd_engine_detail)
+    
+    # ═══════════════════════════════════════════════════════════
+    # Ritual & Polarity commands
+    # ═══════════════════════════════════════════════════════════
+    
+    # rituals
+    rituals_parser = subparsers.add_parser("rituals", help="Ritual/cron history")
+    rituals_parser.add_argument("--limit", "-n", type=int, default=20, help="Number to show")
+    rituals_parser.add_argument("--today", action="store_true", help="Show today only")
+    rituals_parser.add_argument("--vayu", "-v", help="Filter by vayu (prana, apana, etc.)")
+    rituals_parser.add_argument("--type", "-t", help="Filter by type (breathwork, cron_job, etc.)")
+    rituals_parser.add_argument("--json", action="store_true", help="Output as JSON")
+    rituals_parser.set_defaults(func=cmd_rituals)
+    
+    # vayus
+    vayus_parser = subparsers.add_parser("vayus", help="Show the 5 Vayus (vital airs)")
+    vayus_parser.add_argument("name", nargs="?", help="Specific vayu to show details")
+    vayus_parser.add_argument("--json", action="store_true", help="Output as JSON")
+    vayus_parser.set_defaults(func=cmd_vayus)
+    
+    # polarity
+    polarity_parser = subparsers.add_parser("polarity", help="Guardrail Dyad balance")
+    polarity_parser.add_argument("--shift", help="Shift toward: aletheios or pichet")
+    polarity_parser.add_argument("--amount", type=float, default=5.0, help="Shift amount (default: 5)")
+    polarity_parser.add_argument("--reason", help="Reason for shift")
+    polarity_parser.add_argument("--json", action="store_true", help="Output as JSON")
+    polarity_parser.set_defaults(func=cmd_polarity)
     
     return parser
 
