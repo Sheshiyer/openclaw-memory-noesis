@@ -119,6 +119,22 @@ from .rituals import (
     format_ritual_list,
 )
 
+from .vikara import (
+    VikaraType,
+    VikaraSeverity,
+    VikaraThreshold,
+    VikaraAlert,
+    VikaraDetector,
+    ThoughtPhase,
+    ThoughtProcess,
+    DEFAULT_THRESHOLDS,
+    get_vikara_detector,
+    emit_thought_process,
+    check_vikara,
+    format_vikara_status,
+    format_thought_process,
+)
+
 __all__ = [
     # Schema
     "PranaEvent",
@@ -200,4 +216,19 @@ __all__ = [
     "format_vayu_list",
     "format_polarity_gauge",
     "format_ritual_list",
+    
+    # Vikara & Thought Process
+    "VikaraType",
+    "VikaraSeverity",
+    "VikaraThreshold",
+    "VikaraAlert",
+    "VikaraDetector",
+    "ThoughtPhase",
+    "ThoughtProcess",
+    "DEFAULT_THRESHOLDS",
+    "get_vikara_detector",
+    "emit_thought_process",
+    "check_vikara",
+    "format_vikara_status",
+    "format_thought_process",
 ]

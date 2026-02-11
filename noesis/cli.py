@@ -545,6 +545,139 @@ def cmd_polarity(args: argparse.Namespace) -> int:
     return 0
 
 
+# ═══════════════════════════════════════════════════════════
+# Vikara & Status commands
+# ═══════════════════════════════════════════════════════════
+
+def cmd_vikara(args: argparse.Namespace) -> int:
+    """Show Vikara detection status."""
+    from noesis.telemetry import (
+        get_vikara_detector, format_vikara_status, VikaraType
+    )
+    import json as json_module
+    
+    detector = get_vikara_detector()
+    
+    if args.json:
+        print(json_module.dumps(detector.get_status(), indent=2))
+        return 0
+    
+    print(format_vikara_status(detector))
+    
+    # Show recent alerts if any
+    recent = detector.get_recent_alerts(10)
+    if recent and args.history:
+        print()
+        print("📜 Recent Alerts:")
+        for alert in recent:
+            status = "✓" if alert.resolved else "●"
+            print(f"  {status} [{alert.severity.value.upper()}] {alert.vikara_type.value}: {alert.message[:50]}")
+    
+    return 0
+
+
+def cmd_status(args: argparse.Namespace) -> int:
+    """Show comprehensive system status."""
+    from noesis.telemetry import (
+        get_clifford_hour, get_moon_phase, get_polarity,
+        get_vikara_detector, get_engine_tracker, get_current_khaloree,
+        daemon_status
+    )
+    import json as json_module
+    
+    # Gather all status
+    try:
+        clifford = get_clifford_hour()
+    except Exception:
+        clifford = None
+    
+    try:
+        moon = get_moon_phase()
+    except Exception:
+        moon = None
+    
+    try:
+        polarity = get_polarity()
+    except Exception:
+        polarity = None
+    
+    try:
+        vikara = get_vikara_detector()
+    except Exception:
+        vikara = None
+    
+    try:
+        engines = get_engine_tracker()
+    except Exception:
+        engines = None
+    
+    try:
+        khaloree = get_current_khaloree()
+    except Exception:
+        khaloree = 100
+    
+    try:
+        daemon = daemon_status()
+    except Exception:
+        daemon = {"running": False}
+    
+    if args.json:
+        data = {
+            "clifford": clifford.to_dict() if clifford else None,
+            "moon": moon.to_dict() if moon else None,
+            "polarity": polarity.to_dict() if polarity else None,
+            "vikara": vikara.get_status() if vikara else None,
+            "engines": engines.to_summary() if engines else None,
+            "khaloree": khaloree,
+            "daemon": daemon,
+        }
+        print(json_module.dumps(data, indent=2, default=str))
+        return 0
+    
+    # Compact status display
+    print("╔══════════════════════════════════════════════════════════════════╗")
+    print("║                    NOESIS SYSTEM STATUS                          ║")
+    print("╠══════════════════════════════════════════════════════════════════╣")
+    
+    # Temporal
+    if clifford:
+        phase_emoji = {"ascent": "🌅", "plateau": "☀️", "dissolution": "🌙"}.get(clifford.phase.value, "⏰")
+        moon_emoji = moon.emoji if moon else "🌑"
+        print(f"║  🕐 Clifford: {phase_emoji} Hour {clifford.hour}/7 ({clifford.phase.value})  │  Moon: {moon_emoji}      ║")
+    
+    # Khalorēē
+    kh_bar = "█" * (khaloree // 10) + "░" * (10 - khaloree // 10)
+    print(f"║  💫 Khalorēē: [{kh_bar}] {khaloree}/100                         ║")
+    
+    # Polarity
+    if polarity:
+        a_pct = polarity.aletheios_pct
+        p_pct = polarity.pichet_pct
+        balance = "✓" if polarity.is_balanced else "⚠️"
+        print(f"║  ⚖️  Polarity: A:{a_pct:.0f}% / P:{p_pct:.0f}% {balance}                            ║")
+    
+    # Vikara
+    if vikara:
+        active_alerts = len(vikara.active_alerts)
+        if active_alerts == 0:
+            print(f"║  ✅ Vikara: No active alerts                                      ║")
+        else:
+            print(f"║  🚨 Vikara: {active_alerts} active alert(s)                                    ║")
+    
+    # Engines
+    if engines:
+        summary = engines.to_summary()
+        print(f"║  ⚙️  Engines: {summary['active_engines']}/{summary['total_engines']} active  │  Calls: {summary['total_calls']}                    ║")
+    
+    # Daemon
+    daemon_icon = "🟢" if daemon.get("running") else "🔴"
+    print(f"║  {daemon_icon} Daemon: {'Running' if daemon.get('running') else 'Stopped':8}                                       ║")
+    
+    print("╚══════════════════════════════════════════════════════════════════╝")
+    
+    return 0
+
+
 def create_parser() -> argparse.ArgumentParser:
     """Create the argument parser with all subcommands."""
     parser = argparse.ArgumentParser(
@@ -743,6 +876,21 @@ Examples:
     polarity_parser.add_argument("--reason", help="Reason for shift")
     polarity_parser.add_argument("--json", action="store_true", help="Output as JSON")
     polarity_parser.set_defaults(func=cmd_polarity)
+    
+    # ═══════════════════════════════════════════════════════════
+    # Vikara & Status commands
+    # ═══════════════════════════════════════════════════════════
+    
+    # vikara
+    vikara_parser = subparsers.add_parser("vikara", help="Vikara (pattern drift) detection")
+    vikara_parser.add_argument("--history", "-H", action="store_true", help="Show alert history")
+    vikara_parser.add_argument("--json", action="store_true", help="Output as JSON")
+    vikara_parser.set_defaults(func=cmd_vikara)
+    
+    # status (comprehensive)
+    status_parser = subparsers.add_parser("status", help="Comprehensive system status")
+    status_parser.add_argument("--json", action="store_true", help="Output as JSON")
+    status_parser.set_defaults(func=cmd_status)
     
     return parser
 

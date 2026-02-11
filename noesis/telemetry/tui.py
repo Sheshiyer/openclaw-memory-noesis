@@ -47,6 +47,8 @@ EVENT_ICONS = {
     "session.end": "🏁",
     "engine_call": "⚙️",
     "workflow_call": "🔄",
+    "thought_process": "💭",
+    "polarity_shift": "⚖️",
 }
 
 # Guna colors/icons
@@ -108,7 +110,7 @@ class PranaTUI:
             pass
     
     def _build_header(self) -> Panel:
-        """Build the header panel with Clifford Clock and Moon."""
+        """Build the header panel with Clifford Clock, Moon, and Vikara."""
         now = datetime.utcnow().strftime("%H:%M:%S UTC")
         status = "⏸️ PAUSED" if self.paused else "▶️ LIVE"
         
@@ -124,6 +126,18 @@ class PranaTUI:
         # Moon
         if self.moon:
             header_text.append(f"│ {self.moon.emoji} ", style="dim")
+        
+        # Vikara alerts
+        try:
+            from .vikara import get_vikara_detector
+            detector = get_vikara_detector()
+            active = len(detector.active_alerts)
+            if active > 0:
+                header_text.append(f"│ 🚨 {active} ", style="bold red")
+            else:
+                header_text.append("│ ✅ ", style="green")
+        except Exception:
+            pass
         
         header_text.append(f"│ {now}", style="dim")
         
