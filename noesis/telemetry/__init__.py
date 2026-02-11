@@ -7,20 +7,28 @@ This module provides:
 - Query interface for analysis
 - Background daemon for real-time streaming
 - Rich TUI for visualization
+- Clifford Clock (8-hour consciousness octave)
+- Moon phase tracking (Selemene integration)
 
 Usage:
-    from noesis.telemetry import emit, session, query
+    from noesis.telemetry import emit, session, get_clifford_hour, get_moon_phase
     
     # Start a session
     with session(agent_id="chitta-weaver"):
         emit("read", {"path": "SOUL.md"}, kosha_layer="manomaya")
         emit("think", {"topic": "Architecture"}, kosha_layer="vijnanamaya")
+    
+    # Check temporal state
+    clock = get_clifford_hour()
+    print(f"Hour {clock.hour}/7 ({clock.phase.value})")
 
 CLI:
     noesis telemetry start   # Start background daemon
     noesis telemetry watch   # Live TUI dashboard
     noesis telemetry query   # Query events
     noesis telemetry export  # Export data
+    noesis clock             # Show Clifford Clock
+    noesis moon              # Show moon phase
 """
 
 from .schema import (
@@ -65,6 +73,20 @@ from .daemon import (
     daemon_status,
 )
 
+from .temporal import (
+    CliffordPhase,
+    CliffordState,
+    MoonPhase,
+    MoonState,
+    TemporalState,
+    Guna,
+    get_clifford_hour,
+    get_moon_phase,
+    get_temporal_state,
+    format_clifford_clock,
+    format_moon_phase,
+)
+
 __all__ = [
     # Schema
     "PranaEvent",
@@ -103,4 +125,17 @@ __all__ = [
     "start_daemon",
     "stop_daemon",
     "daemon_status",
+    
+    # Temporal
+    "CliffordPhase",
+    "CliffordState",
+    "MoonPhase",
+    "MoonState",
+    "TemporalState",
+    "Guna",
+    "get_clifford_hour",
+    "get_moon_phase",
+    "get_temporal_state",
+    "format_clifford_clock",
+    "format_moon_phase",
 ]

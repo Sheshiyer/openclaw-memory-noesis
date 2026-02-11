@@ -10,6 +10,9 @@ Commands:
     noesis context           Generate context for tier
     noesis teach             Teaching mode (Guru)
     noesis agents            List available agents
+    noesis clock             Show Clifford Clock (8-hour octave)
+    noesis moon              Show moon phase (Selemene)
+    noesis telemetry         Prana Stream telemetry
 """
 
 import argparse
@@ -112,6 +115,58 @@ def cmd_agents(args: argparse.Namespace) -> int:
     config = resolve_paths(config)
     
     return list_agents(config, verbose=args.verbose)
+
+
+# ═══════════════════════════════════════════════════════════
+# Temporal Commands (Clifford Clock & Moon)
+# ═══════════════════════════════════════════════════════════
+
+def cmd_clock(args: argparse.Namespace) -> int:
+    """Show Clifford Clock state."""
+    from noesis.telemetry import get_clifford_hour, format_clifford_clock
+    import json as json_module
+    
+    state = get_clifford_hour()
+    
+    if args.json:
+        print(json_module.dumps(state.to_dict(), indent=2))
+    else:
+        print(format_clifford_clock(state, ascii_art=not args.minimal))
+    
+    return 0
+
+
+def cmd_moon(args: argparse.Namespace) -> int:
+    """Show moon phase."""
+    from noesis.telemetry import get_moon_phase, format_moon_phase
+    import json as json_module
+    
+    state = get_moon_phase()
+    
+    if args.json:
+        print(json_module.dumps(state.to_dict(), indent=2))
+    else:
+        print(format_moon_phase(state))
+    
+    return 0
+
+
+def cmd_temporal(args: argparse.Namespace) -> int:
+    """Show combined temporal state."""
+    from noesis.telemetry import get_temporal_state, format_clifford_clock, format_moon_phase
+    import json as json_module
+    
+    state = get_temporal_state()
+    
+    if args.json:
+        print(json_module.dumps(state.to_dict(), indent=2))
+    else:
+        print(format_clifford_clock(state.clifford, ascii_art=True))
+        print("\n")
+        print(format_moon_phase(state.moon))
+        print(f"\n🎭 Combined Guna: {state.combined_guna.value}")
+    
+    return 0
 
 
 # ═══════════════════════════════════════════════════════════
@@ -328,6 +383,26 @@ Examples:
     # agents
     agents_parser = subparsers.add_parser("agents", help="List available agents")
     agents_parser.set_defaults(func=cmd_agents)
+    
+    # ═══════════════════════════════════════════════════════════
+    # Temporal commands (Clifford Clock & Moon)
+    # ═══════════════════════════════════════════════════════════
+    
+    # clock
+    clock_parser = subparsers.add_parser("clock", help="Show Clifford Clock (8-hour octave)")
+    clock_parser.add_argument("--json", action="store_true", help="Output as JSON")
+    clock_parser.add_argument("--minimal", "-m", action="store_true", help="Minimal output (no ASCII)")
+    clock_parser.set_defaults(func=cmd_clock)
+    
+    # moon
+    moon_parser = subparsers.add_parser("moon", help="Show moon phase (Selemene)")
+    moon_parser.add_argument("--json", action="store_true", help="Output as JSON")
+    moon_parser.set_defaults(func=cmd_moon)
+    
+    # temporal (combined)
+    temporal_parser = subparsers.add_parser("temporal", help="Show combined temporal state")
+    temporal_parser.add_argument("--json", action="store_true", help="Output as JSON")
+    temporal_parser.set_defaults(func=cmd_temporal)
     
     # ═══════════════════════════════════════════════════════════
     # Telemetry subcommands

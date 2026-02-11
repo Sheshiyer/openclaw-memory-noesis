@@ -92,7 +92,8 @@ def emit(
     kosha_layer: str = "annamaya",
     guna_state: str = "sattvic",
     khalorēē_delta: int = 0,
-    agent_id: Optional[str] = None
+    agent_id: Optional[str] = None,
+    include_temporal: bool = True
 ) -> PranaEvent:
     """
     Emit a telemetry event.
@@ -104,10 +105,23 @@ def emit(
         guna_state: Current guna (sattvic, rajasic, tamasic)
         khalorēē_delta: Points to add/subtract from balance
         agent_id: Override agent ID for this event
+        include_temporal: Include Clifford Clock data (default True)
     
     Returns:
         The created PranaEvent
     """
+    # Get Clifford Clock state
+    clifford_hour = None
+    clifford_phase = None
+    if include_temporal:
+        try:
+            from .temporal import get_clifford_hour
+            clifford = get_clifford_hour()
+            clifford_hour = clifford.hour
+            clifford_phase = clifford.phase.value
+        except Exception:
+            pass
+    
     event = PranaEvent(
         event_type=event_type,
         payload=payload or {},
@@ -115,7 +129,9 @@ def emit(
         guna_state=guna_state,
         khalorēē_delta=khalorēē_delta,
         agent_id=agent_id or _current_agent_id,
-        session_id=get_session_id()
+        session_id=get_session_id(),
+        clifford_hour=clifford_hour,
+        clifford_phase=clifford_phase,
     )
     
     # Write to SQLite (persistent)

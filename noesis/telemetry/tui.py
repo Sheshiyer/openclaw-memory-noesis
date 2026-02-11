@@ -80,6 +80,8 @@ class PranaTUI:
         self.paused = False
         self.khaloree = 100
         self.stats: Dict[str, Any] = {}
+        self.clifford = None
+        self.moon = None
         
         # Load recent events
         self._load_recent_events()
@@ -94,15 +96,33 @@ class PranaTUI:
             self.stats = get_event_stats(since="1 hour ago")
         except Exception:
             pass
+        
+        # Load temporal state
+        try:
+            from .temporal import get_clifford_hour, get_moon_phase
+            self.clifford = get_clifford_hour()
+            self.moon = get_moon_phase()
+        except Exception:
+            pass
     
     def _build_header(self) -> Panel:
-        """Build the header panel."""
-        now = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+        """Build the header panel with Clifford Clock and Moon."""
+        now = datetime.utcnow().strftime("%H:%M:%S UTC")
         status = "⏸️ PAUSED" if self.paused else "▶️ LIVE"
         
         header_text = Text()
         header_text.append("🕉️ PRANA STREAM ", style="bold magenta")
         header_text.append(f"│ {status} ", style="bold green" if not self.paused else "bold yellow")
+        
+        # Clifford Clock
+        if self.clifford:
+            phase_emoji = {"ascent": "🌅", "plateau": "☀️", "dissolution": "🌙"}.get(self.clifford.phase.value, "⏰")
+            header_text.append(f"│ {phase_emoji} {self.clifford.hour}/7 ", style="cyan")
+        
+        # Moon
+        if self.moon:
+            header_text.append(f"│ {self.moon.emoji} ", style="dim")
+        
         header_text.append(f"│ {now}", style="dim")
         
         return Panel(header_text, box=box.ROUNDED)
@@ -318,6 +338,7 @@ class PranaTUI:
         
         with Live(self._build_layout(), console=self.console, refresh_per_second=2) as live:
             last_stats_refresh = time.time()
+            last_temporal_refresh = time.time()
             
             while self.running:
                 try:
@@ -337,6 +358,16 @@ class PranaTUI:
                         except Exception:
                             pass
                         last_stats_refresh = time.time()
+                    
+                    # Refresh temporal state every 60 seconds
+                    if time.time() - last_temporal_refresh > 60:
+                        try:
+                            from .temporal import get_clifford_hour, get_moon_phase
+                            self.clifford = get_clifford_hour()
+                            self.moon = get_moon_phase()
+                        except Exception:
+                            pass
+                        last_temporal_refresh = time.time()
                     
                     # Update display
                     live.update(self._build_layout())

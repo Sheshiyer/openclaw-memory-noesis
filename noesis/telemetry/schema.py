@@ -22,7 +22,7 @@ DEFAULT_FIFO_PATH = Path.home() / ".noesis" / "prana.fifo"
 DEFAULT_PID_PATH = Path.home() / ".noesis" / "prana.pid"
 
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 SCHEMA_SQL = """
 -- Events table: Every telemetry event
@@ -35,7 +35,9 @@ CREATE TABLE IF NOT EXISTS events (
     payload TEXT,
     kosha_layer TEXT,
     guna_state TEXT,
-    khalorēē_delta INTEGER DEFAULT 0
+    khalorēē_delta INTEGER DEFAULT 0,
+    clifford_hour INTEGER,
+    clifford_phase TEXT
 );
 
 -- Sessions table: Track agent sessions
@@ -45,7 +47,9 @@ CREATE TABLE IF NOT EXISTS sessions (
     ended_at TEXT,
     agent_id TEXT,
     total_khalorēē INTEGER DEFAULT 0,
-    metadata TEXT
+    metadata TEXT,
+    aletheios_pct INTEGER DEFAULT 50,
+    pichet_pct INTEGER DEFAULT 50
 );
 
 -- Khalorēē ledger: Running balance of metabolic reserve
@@ -56,6 +60,28 @@ CREATE TABLE IF NOT EXISTS khaloree_ledger (
     delta INTEGER NOT NULL,
     reason TEXT,
     balance INTEGER NOT NULL
+);
+
+-- Engine states: Track 13 Selemene engines
+CREATE TABLE IF NOT EXISTS engine_states (
+    engine_number INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    is_active BOOLEAN DEFAULT 0,
+    current_load INTEGER DEFAULT 0,
+    last_active TEXT,
+    kosha_layer TEXT,
+    color TEXT
+);
+
+-- Rituals: Cron job tracking
+CREATE TABLE IF NOT EXISTS rituals (
+    job_id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    schedule TEXT,
+    last_run TEXT,
+    status TEXT DEFAULT 'pending',
+    vayu TEXT,
+    duration_ms INTEGER
 );
 
 -- Schema version tracking
@@ -70,8 +96,47 @@ CREATE INDEX IF NOT EXISTS idx_events_type ON events(event_type);
 CREATE INDEX IF NOT EXISTS idx_events_timestamp ON events(timestamp);
 CREATE INDEX IF NOT EXISTS idx_events_agent ON events(agent_id);
 CREATE INDEX IF NOT EXISTS idx_events_kosha ON events(kosha_layer);
+CREATE INDEX IF NOT EXISTS idx_events_clifford ON events(clifford_phase);
 CREATE INDEX IF NOT EXISTS idx_sessions_agent ON sessions(agent_id);
 CREATE INDEX IF NOT EXISTS idx_ledger_session ON khaloree_ledger(session_id);
+CREATE INDEX IF NOT EXISTS idx_rituals_status ON rituals(status);
+"""
+
+# Migration for schema v1 -> v2
+MIGRATION_V2 = """
+-- Add clifford columns to events
+ALTER TABLE events ADD COLUMN clifford_hour INTEGER;
+ALTER TABLE events ADD COLUMN clifford_phase TEXT;
+
+-- Add polarity to sessions
+ALTER TABLE sessions ADD COLUMN aletheios_pct INTEGER DEFAULT 50;
+ALTER TABLE sessions ADD COLUMN pichet_pct INTEGER DEFAULT 50;
+
+-- Create engine_states table
+CREATE TABLE IF NOT EXISTS engine_states (
+    engine_number INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    is_active BOOLEAN DEFAULT 0,
+    current_load INTEGER DEFAULT 0,
+    last_active TEXT,
+    kosha_layer TEXT,
+    color TEXT
+);
+
+-- Create rituals table
+CREATE TABLE IF NOT EXISTS rituals (
+    job_id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    schedule TEXT,
+    last_run TEXT,
+    status TEXT DEFAULT 'pending',
+    vayu TEXT,
+    duration_ms INTEGER
+);
+
+-- New indexes
+CREATE INDEX IF NOT EXISTS idx_events_clifford ON events(clifford_phase);
+CREATE INDEX IF NOT EXISTS idx_rituals_status ON rituals(status);
 """
 
 
@@ -85,6 +150,8 @@ class PranaEvent:
     khalorēē_delta: int = 0
     agent_id: Optional[str] = None
     session_id: Optional[str] = None
+    clifford_hour: Optional[int] = None
+    clifford_phase: Optional[str] = None
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat() + "Z")
     
@@ -152,17 +219,42 @@ def get_connection(db_path: Optional[Path] = None) -> sqlite3.Connection:
     conn = sqlite3.connect(str(db_path))
     conn.row_factory = sqlite3.Row
     
-    # Check if schema needs initialization
+    # Check if schema needs initialization or migration
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='schema_version'")
+    
     if cursor.fetchone() is None:
-        # Initialize schema
+        # Fresh install - create all tables
         conn.executescript(SCHEMA_SQL)
         conn.execute(
             "INSERT INTO schema_version (version, applied_at) VALUES (?, ?)",
             (SCHEMA_VERSION, datetime.utcnow().isoformat() + "Z")
         )
         conn.commit()
+    else:
+        # Check for migrations
+        cursor.execute("SELECT MAX(version) as v FROM schema_version")
+        row = cursor.fetchone()
+        current_version = row['v'] if row else 0
+        
+        if current_version < 2:
+            # Run v2 migration
+            try:
+                for stmt in MIGRATION_V2.split(';'):
+                    stmt = stmt.strip()
+                    if stmt:
+                        try:
+                            conn.execute(stmt)
+                        except sqlite3.OperationalError:
+                            # Column/table might already exist
+                            pass
+                conn.execute(
+                    "INSERT INTO schema_version (version, applied_at) VALUES (?, ?)",
+                    (2, datetime.utcnow().isoformat() + "Z")
+                )
+                conn.commit()
+            except Exception:
+                pass  # Best effort migration
     
     return conn
 
@@ -172,9 +264,11 @@ def insert_event(conn: sqlite3.Connection, event: PranaEvent) -> None:
     d = event.to_dict()
     conn.execute("""
         INSERT INTO events (id, timestamp, session_id, agent_id, event_type, 
-                           payload, kosha_layer, guna_state, khalorēē_delta)
+                           payload, kosha_layer, guna_state, khalorēē_delta,
+                           clifford_hour, clifford_phase)
         VALUES (:id, :timestamp, :session_id, :agent_id, :event_type,
-                :payload, :kosha_layer, :guna_state, :khalorēē_delta)
+                :payload, :kosha_layer, :guna_state, :khalorēē_delta,
+                :clifford_hour, :clifford_phase)
     """, d)
     conn.commit()
 
