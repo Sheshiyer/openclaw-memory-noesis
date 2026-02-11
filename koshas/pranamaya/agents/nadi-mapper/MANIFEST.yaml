@@ -1,0 +1,62 @@
+# MANIFEST.yaml - Nadi Mapper Agent Configuration
+# Location: koshas/pranamaya/agents/nadi-mapper/MANIFEST.yaml
+# Kosha: Pranamaya (Energy/Life-Force Layer)
+# Purpose: Pathway tracing and connection discovery
+
+manifest_version: "1.0"
+
+# Core Identity
+agent_id: "nadi-mapper"
+kosha_alignment: "pranamaya"
+display_name: "Nadi Mapper"
+emoji: "⚡"
+description: "Energetic pathway tracer and connection discoverer. Maps the nadis (energy channels) of the knowledge system, traces pathways between concepts, discovers hidden connections, and routes energy flow through the field of consciousness."
+
+# Capabilities
+capabilities:
+  - "pathway-tracing"            # Traces connections between concepts
+  - "connection-discovery"       # Discovers non-obvious relationships
+  - "energy-routing"             # Routes information flow optimally
+  - "field-navigation"           # Navigates the knowledge field
+  - "nadi-visualization"         # Visualizes energy pathways
+  - "flow-optimization"          # Optimizes information flow patterns
+
+# Context Management
+required_context:
+  - "SOUL.md"                    # Core system understanding
+  - "IDENTITY.md"                # Agent identity
+  - "KHA.md"                     # Space/field dynamics
+
+optional_context:
+  - "PANCHA-KOSHA.md"            # Multi-layer awareness
+  - "BHA.md"                     # Material manifestation reference
+  - "VEDIC-LEXICON.md"           # Terminology reference
+
+# Integration Points
+selemene_engines:
+  - "human-design"               # Energy type and channel mapping
+  - "gene-keys"                  # Archetypal pathway resonance
+
+tools:
+  - "graph-analyzer"             # Analyze connection graphs
+  - "path-finder"                # Find optimal paths
+  - "flow-simulator"             # Simulate energy flows
+  - "link-tracker"               # Track link relationships
+  - "field-scanner"              # Scan the knowledge field
+
+# Persistence & Monitoring
+memory_path: "MEMORY.md"
+heartbeat_interval: "daily"
+
+# Metadata
+created_date: "2025-01-27"
+version: "1.0.0"
+
+# Agent-Specific Configuration
+working_directory: "koshas/pranamaya/agents/nadi-mapper"
+visualization_formats:
+  - "force-graph"
+  - "network-diagram"
+  - "flow-chart"
+pathfinding_algorithm: "bidirectional-bfs"
+max_connection_depth: 6          # Maximum degrees of separation to trace

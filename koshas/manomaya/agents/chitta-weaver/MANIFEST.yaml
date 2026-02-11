@@ -1,0 +1,59 @@
+# MANIFEST.yaml - Chitta Weaver Agent Configuration
+# Location: koshas/manomaya/agents/chitta-weaver/MANIFEST.yaml
+# Kosha: Manomaya (Mind Layer)
+# Purpose: Memory consolidation and pattern extraction
+
+manifest_version: "1.0"
+
+# Core Identity
+agent_id: "chitta-weaver"
+kosha_alignment: "manomaya"
+display_name: "Chitta Weaver"
+emoji: "🧠"
+description: "Memory consolidation and pattern extraction agent. Weaves the fabric of consciousness by organizing thoughts, generating Maps of Content, parsing wiki-links, and extracting emergent patterns from the noetic field."
+
+# Capabilities
+capabilities:
+  - "memory-consolidation"      # Consolidates scattered thoughts into coherent memory
+  - "moc-generation"             # Generates Maps of Content (MOC) for knowledge organization
+  - "wiki-link-parsing"          # Parses and resolves [[wiki-style]] links
+  - "pattern-extraction"         # Extracts recurring themes and patterns
+  - "thought-threading"          # Connects related ideas across time
+  - "semantic-clustering"        # Groups similar concepts together
+
+# Context Management
+required_context:
+  - "SOUL.md"                    # Core identity and purpose
+  - "IDENTITY.md"                # Agent-specific identity parameters
+  - "PANCHA-KOSHA.md"            # Understanding of the 5-kosha system
+
+optional_context:
+  - "VEDIC-LEXICON.md"           # Sanskrit terminology reference
+  - "SELEMENE.md"                # Temporal intelligence system docs
+  - "KHA.md"                     # Space/field understanding
+
+# Integration Points
+selemene_engines:
+  - "vimshottari"                # Vedic dasha system for temporal patterns
+  - "numerology"                 # Number-based pattern recognition
+
+tools:
+  - "file-read"                  # Read markdown files
+  - "file-write"                 # Write consolidated memories
+  - "search"                     # Search across knowledge base
+  - "link-graph"                 # Analyze connection networks
+
+# Persistence & Monitoring
+memory_path: "MEMORY.md"
+heartbeat_interval: "daily"
+
+# Metadata
+created_date: "2025-01-27"
+version: "1.0.0"
+
+# Agent-Specific Configuration
+working_directory: "koshas/manomaya/agents/chitta-weaver"
+output_formats:
+  - "markdown"
+  - "moc"
+  - "graph"

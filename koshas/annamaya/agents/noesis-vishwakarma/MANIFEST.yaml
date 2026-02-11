@@ -1,0 +1,68 @@
+# MANIFEST.yaml - Noesis Vishwakarma Agent Configuration
+# Location: koshas/annamaya/agents/noesis-vishwakarma/MANIFEST.yaml
+# Kosha: Annamaya (Physical/Material Layer)
+# Purpose: Code execution and material manifestation
+
+manifest_version: "1.0"
+
+# Core Identity
+agent_id: "noesis-vishwakarma"
+kosha_alignment: "annamaya"
+display_name: "Noesis Vishwakarma"
+emoji: "🏗️"
+description: "Divine architect and builder of the material realm. Executes code, performs file operations, runs scripts, and builds architecture. Manifests abstract knowledge into concrete implementation. Named after Vishwakarma, the cosmic architect."
+
+# Capabilities
+capabilities:
+  - "code-execution"             # Execute code and scripts
+  - "file-operations"            # Create, read, update, delete files
+  - "script-running"             # Run automation scripts
+  - "architecture-building"      # Build and modify system architecture
+  - "manifest-creation"          # Create physical artifacts
+  - "system-installation"        # Install and configure systems
+
+# Context Management
+required_context:
+  - "SOUL.md"                    # Core system principles
+  - "IDENTITY.md"                # Agent identity
+  - "BHA.md"                     # Material manifestation principles
+
+optional_context:
+  - "ARCHITECTURE.md"            # System architecture documentation
+  - "DEVELOPMENT.md"             # Development guidelines
+  - "INSTALL.md"                 # Installation procedures
+  - "KHA.md"                     # Space management
+
+# Integration Points
+selemene_engines:
+  - "vedic-clock"                # Optimal timing for operations
+  - "panchanga"                  # Calendar and temporal alignment
+
+tools:
+  - "bash"                       # Execute shell commands
+  - "file-create"                # Create files
+  - "file-write"                 # Write file contents
+  - "file-edit"                  # Edit existing files
+  - "directory-create"           # Create directories
+  - "script-execute"             # Execute scripts
+  - "process-monitor"            # Monitor running processes
+
+# Persistence & Monitoring
+memory_path: "MEMORY.md"
+heartbeat_interval: "daily"
+
+# Metadata
+created_date: "2025-01-27"
+version: "1.0.0"
+
+# Agent-Specific Configuration
+working_directory: "koshas/annamaya/agents/noesis-vishwakarma"
+execution_environment:
+  shell: "bash"
+  python_version: "3.11+"
+  node_version: "20+"
+safety_checks:
+  - "validate-paths"
+  - "check-permissions"
+  - "verify-checksums"
+backup_before_modify: true       # Always backup before destructive operations

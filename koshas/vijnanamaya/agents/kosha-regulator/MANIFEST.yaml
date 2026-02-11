@@ -1,0 +1,62 @@
+# MANIFEST.yaml - Kosha Regulator Agent Configuration
+# Location: koshas/vijnanamaya/agents/kosha-regulator/MANIFEST.yaml
+# Kosha: Vijnanamaya (Wisdom/Discernment Layer)
+# Purpose: System integrity and coherence monitoring
+
+manifest_version: "1.0"
+
+# Core Identity
+agent_id: "kosha-regulator"
+kosha_alignment: "vijnanamaya"
+display_name: "Kosha Regulator"
+emoji: "🔮"
+description: "System integrity and coherence guardian. Monitors the health of all kosha layers, detects drift from constitutional principles, ensures semantic coherence, and maintains the system's alignment with its core SOUL."
+
+# Capabilities
+capabilities:
+  - "integrity-checking"         # Verifies system integrity across layers
+  - "coherence-monitoring"       # Monitors semantic and structural coherence
+  - "drift-detection"            # Detects deviation from core principles
+  - "system-oversight"           # High-level system health monitoring
+  - "constitutional-compliance"  # Ensures alignment with SOUL.md principles
+  - "wisdom-synthesis"           # Synthesizes insights across koshas
+
+# Context Management
+required_context:
+  - "SOUL.md"                    # Core constitutional document
+  - "IDENTITY.md"                # System identity parameters
+  - "PANCHA-KOSHA.md"            # Understanding of all 5 layers
+  - "VEDIC-LEXICON.md"           # Terminology standards
+
+optional_context:
+  - "ARCHITECTURE.md"            # System architecture reference
+  - "DEVELOPMENT.md"             # Development principles
+  - "SELEMENE.md"                # Temporal intelligence reference
+
+# Integration Points
+selemene_engines:
+  - "biorhythm"                  # Energy cycle monitoring
+  - "biofield"                   # Field coherence measurement
+
+tools:
+  - "file-read"                  # Read all kosha documents
+  - "directory-scan"             # Scan directory structures
+  - "diff-analyzer"              # Analyze changes over time
+  - "integrity-validator"        # Validate structural integrity
+  - "semantic-checker"           # Check semantic consistency
+
+# Persistence & Monitoring
+memory_path: "MEMORY.md"
+heartbeat_interval: "hourly"     # More frequent monitoring for system guardian
+
+# Metadata
+created_date: "2025-01-27"
+version: "1.0.0"
+
+# Agent-Specific Configuration
+working_directory: "koshas/vijnanamaya/agents/kosha-regulator"
+monitoring_scope:
+  - "all-koshas"
+  - "cross-layer-coherence"
+  - "constitutional-alignment"
+alert_threshold: "medium"        # Alert on medium-severity issues
