@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "noesis"
+version = "0.1.0"
+description = "Tryambakam Noesis - Consciousness architecture kernel for AI agents"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    { name = "Shesh Iyer", email = "shesh@tryambakam.space" }
+]
+keywords = ["ai", "consciousness", "agents", "vedic", "architecture"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# No dependencies for core - stdlib only
+dependencies = []
+
+[project.optional-dependencies]
+selemene = ["httpx>=0.27"]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=4.0",
+    "mypy>=1.8",
+    "ruff>=0.2",
+]
+all = ["noesis[selemene,dev]"]
+
+[project.scripts]
+noesis = "noesis.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/tryambakam/10865xseed"
+Documentation = "https://github.com/tryambakam/10865xseed#readme"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["noesis*"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

@@ -1,0 +1,28 @@
+# Noesis Configuration
+# ━━━━━━━━━━━━━━━━━━━━━
+# Configuration file for Tryambakam Noesis kernel
+
+[noesis]
+version = "0.1.0"
+koshas_root = "./koshas"
+brahmasthana = "./koshas/brahmasthana"
+
+[selemene]
+base_url = "https://selemene.tryambakam.space"
+# API key should be set via environment variable: NOESIS_API_KEY
+timeout = 30
+user_agent = "Noesis/0.1.0"
+
+[agents]
+default_tier = "core"
+auto_fetch_selemene = true
+
+# Context tiers define how much of the kernel is loaded
+# - lite: ~3KB (SOUL.md, IDENTITY.md only)
+# - core: ~49KB (+ PANCHA-KOSHA.md, USER.md)
+# - standard: ~60KB (+ KHA, BHA, LHA, VEDIC-LEXICON)
+# - full: ~155KB (+ SELEMENE-ENGINE, ARCHITECTURE-VISUAL)
+
+[logging]
+level = "INFO"
+format = "text"  # or "json"
