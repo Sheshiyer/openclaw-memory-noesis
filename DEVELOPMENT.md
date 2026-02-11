@@ -2,27 +2,61 @@
 
 **Structured roadmap for maintaining, releasing, and evolving 10865xseed**
 
-## Current Status (v0.1.0-alpha)
+## Current Status (v0.2.0)
 
 ### ✅ Complete
 - Prana context assembly system (`prana.py`)
 - Rich TUI installation wizard (`setup_openclaw.py`)
-- CLI tool with subcommands (`openclaw_seed.py`)
+- CLI tool with subcommands (`noesis`, `openclaw_seed.py`)
 - One-line installer (`install.sh`)
 - Platform support (Claude Code, Cursor, generic)
 - Workspace agent scaffolds (4 agents)
 - Comprehensive documentation (INSTALL.md, ARCHITECTURE.md)
 - GitHub Copilot instructions
+- **Noesis Python Package** (v0.2.0)
+- **Prana Stream Telemetry System** (CLI-native)
+
+### 🆕 Telemetry System (v0.2.0)
+
+The `noesis.telemetry` module provides consciousness-aware telemetry:
+
+```bash
+# Temporal awareness
+noesis clock     # Clifford Clock (8-hour consciousness octave)
+noesis moon      # Moon phase tracking
+noesis temporal  # Combined temporal state
+
+# Engine tracking (13 Selemene engines)
+noesis engines   # All engine states
+noesis engine panchanga  # Single engine detail
+
+# Ritual & balance
+noesis vayus     # 5 Vayu (vital air) states
+noesis rituals   # Ritual tracking
+noesis polarity  # Aletheios/Pichet balance
+
+# Drift detection
+noesis vikara    # Pattern drift alerts
+
+# Comprehensive dashboard
+noesis status    # Full system status
+```
+
+**Key modules:**
+- `noesis/telemetry/temporal.py` - Clifford Clock, Moon Phase
+- `noesis/telemetry/engines.py` - 13 Selemene engine tracking
+- `noesis/telemetry/rituals.py` - Vayu, Polarity, Rituals
+- `noesis/telemetry/vikara.py` - Vikara detection, ThoughtProcess
+
+See `docs/TELEMETRY.md` for full API documentation.
 
 ### 🚧 In Progress
-- Testing and validation
-- User feedback collection
-- Documentation refinement
+- CI/CD pipeline
+- Package distribution (PyPI)
 
 ### ⏳ Planned
 - Automated updates
-- CI/CD pipeline
-- Package distribution (Homebrew, PyPI)
+- Homebrew tap
 - Vector DB integration
 - Community templates
 

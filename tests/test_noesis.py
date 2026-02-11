@@ -9,7 +9,7 @@ from pathlib import Path
 def test_import():
     """Test that noesis can be imported."""
     import noesis
-    assert noesis.__version__ == "0.1.0"
+    assert noesis.__version__ == "0.2.0"
 
 
 def test_config_loading():
