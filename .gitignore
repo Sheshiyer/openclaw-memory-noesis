@@ -1,23 +1,97 @@
-# Environment variables
+# ═══════════════════════════════════════════════════════════════════════════════
+# 10865xseed .gitignore
+# Tryambakam Noesis - Consciousness Architecture Repository
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# SECRETS & CREDENTIALS (Critical - Never Commit)
+# ─────────────────────────────────────────────────────────────────────────────────
 .env
-.env.local
-.env.*.local
+.env.*
+*.env
+secrets/
+credentials/
 
-# Node modules
-node_modules/
+# API Keys patterns
+**/auth-profiles.json
+**/*-credentials.json
+**/*-secrets.json
 
-# Build outputs
-dist/
-build/
+# ─────────────────────────────────────────────────────────────────────────────────
+# AGENT RUNTIME STATE (OpenClaw/Session Data)
+# ─────────────────────────────────────────────────────────────────────────────────
+**/sessions/
+**/*.jsonl
+**/*.jsonl.deleted.*
+**/cron/runs/
+**/cron/jobs.json
+**/cron/jobs.json.bak*
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# SAMSKARA INSTALLATION LOGS (Generated at Runtime)
+# ─────────────────────────────────────────────────────────────────────────────────
+**/sankalpa-*.log
+**/samskara-install-*.log
+**/samskara-report-*.json
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# TELEMETRY & RUNTIME DATA
+# ─────────────────────────────────────────────────────────────────────────────────
+koshas/pranamaya/logs/
+koshas/pranamaya/khaloree/*.json
 *.log
 
-# Agents
-**/auth-profiles.json
-**/sessions/
-
+# ─────────────────────────────────────────────────────────────────────────────────
+# BUILD & CACHE
+# ─────────────────────────────────────────────────────────────────────────────────
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+.eggs/
+*.egg-info/
+.pytest_cache/
 
-# macOS
+# Node
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+
+# Rust (if Selemene local builds)
+target/
+Cargo.lock
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# IDE & EDITOR
+# ─────────────────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.trae/
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# OS ARTIFACTS
+# ─────────────────────────────────────────────────────────────────────────────────
 .DS_Store
+Thumbs.db
+Desktop.ini
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# LARGE FILES / INTAKE (process then remove)
+# ─────────────────────────────────────────────────────────────────────────────────
+koshas/manomaya/intake/*.pdf
+koshas/manomaya/intake/*.epub
+staging/
+
+# ─────────────────────────────────────────────────────────────────────────────────
+# GENERATED CONTEXT FILES (Auto-regenerated)
+# ─────────────────────────────────────────────────────────────────────────────────
+PRANA_CONTEXT.md

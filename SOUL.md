@@ -1,1 +1,0 @@
-memory/kernel/SOUL.md

@@ -1,0 +1,262 @@
+<mxfile host="app.diagrams.net" modified="2026-02-11T07:38:00.000Z" agent="Claude" version="24.7.17">
+  <diagram id="user-journey" name="User Journey Flows">
+    <mxGraphModel dx="1434" dy="859" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- Title -->
+        <mxCell id="2" value="10865xseed User Journey Flows" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="50" as="geometry"/>
+        </mxCell>
+        
+        <!-- START -->
+        <mxCell id="3" value="START&#xa;New User" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="640" y="90" width="120" height="60" as="geometry"/>
+        </mxCell>
+        
+        <!-- Decision: Experience Level -->
+        <mxCell id="4" value="Experience&#xa;Level?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="625" y="190" width="150" height="100" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="3" target="4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- JOURNEY 1: Quick Install (Left Path) -->
+        <mxCell id="6" value="Experienced&#xa;Dev" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="280" y="220" width="80" height="30" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="7" value="curl -fsSL .../install.sh | bash" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="210" y="330" width="220" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4" target="7">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="9" value="install.sh runs:&#xa;✓ Checks Python 3.7+&#xa;✓ Installs rich&#xa;✓ Creates ~/.openclaw/&#xa;✓ Symlinks openclaw-seed" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=9;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="210" y="410" width="220" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="7" target="9">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="11" value="openclaw-seed install&#xa;(TUI Wizard)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="210" y="520" width="220" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="9" target="11">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="13" value="Rich TUI - 15 Steps:&#xa;1. Identity&#xa;2. Archetype&#xa;3. Platform&#xa;4. Root path&#xa;5-12. Configuration&#xa;13. Review&#xa;14-15. Install" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=9;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="210" y="600" width="220" height="100" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="11" target="13">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="15" value="Platform Context&#xa;Generated" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#60a917;strokeColor=#2D7600;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="210" y="730" width="220" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="13" target="15">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- JOURNEY 2: Manual Install (Right Path) -->
+        <mxCell id="17" value="First-time&#xa;User" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="220" width="80" height="30" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="18" value="git clone&#xa;https://github.com/.../10865xseed.git" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="950" y="330" width="240" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4" target="18">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="20" value="cd 10865xseed&#xa;Read Documentation" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="950" y="410" width="240" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="21" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="18" target="20">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="22" value="Read Files:&#xa;• INSTALL.md&#xa;• ARCHITECTURE.md&#xa;• koshas/brahmasthana/SOUL.md" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="950" y="490" width="240" height="70" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="20" target="22">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="24" value="./koshas/annamaya/scripts/&#xa;install_openclaw_seed.sh" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="950" y="590" width="240" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="25" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="22" target="24">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="26" value="openclaw-seed doctor&#xa;(Verify Health)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="950" y="670" width="240" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="27" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="24" target="26">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="28" value="openclaw-seed prana&#xa;--root . --platform cursor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#60a917;strokeColor=#2D7600;fontColor=#ffffff;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="950" y="750" width="240" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="29" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="26" target="28">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- JOURNEY 3: Advanced Use (Center Path) -->
+        <mxCell id="30" value="Want Custom&#xa;Agent?" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="650" y="220" width="100" height="30" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="31" value="System Already Installed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="560" y="330" width="280" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="32" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4" target="31">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="33" value="openclaw-seed scaffold-agent&#xa;--name my-agent --template pi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="410" width="280" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="34" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="31" target="33">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="35" value="Creates:&#xa;koshas/annamaya/agents/my-agent/&#xa;├── agent/models.json&#xa;├── SOUL.md (edit mission)&#xa;├── IDENTITY.md (edit name/tone)&#xa;└── TOOLS.md (edit capabilities)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=9;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="490" width="280" height="90" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="36" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="33" target="35">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="37" value="Edit Agent Files&#xa;(SOUL.md, IDENTITY.md, TOOLS.md)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="610" width="280" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="38" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="35" target="37">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="39" value="openclaw-seed prana&#xa;(Regenerate Context)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#60a917;strokeColor=#2D7600;fontColor=#ffffff;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="690" width="280" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="40" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="37" target="39">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- CONVERGENCE -->
+        <mxCell id="41" value="Context Loaded in Platform" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="460" y="850" width="480" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="42" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#60a917;" edge="1" parent="1" source="15" target="41">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="43" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#60a917;" edge="1" parent="1" source="39" target="41">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="44" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#60a917;" edge="1" parent="1" source="28" target="41">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- Platform Examples -->
+        <mxCell id="45" value="Claude Code:&#xa;~/.claude/openclaw_context.md" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#006EAF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="460" y="940" width="220" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="46" value="Cursor:&#xa;.cursorrules" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#006EAF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="700" y="940" width="120" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="47" value="Generic:&#xa;~/.openclaw/CONTEXT.md" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#006EAF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="840" y="940" width="180" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="48" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="41" target="45">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="49" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="41" target="46">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="50" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="41" target="47">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- END -->
+        <mxCell id="51" value="END&#xa;System Ready&#xa;Agent Ensouled" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1030" width="120" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="52" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#b85450;" edge="1" parent="1" source="45" target="51">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="53" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#b85450;" edge="1" parent="1" source="46" target="51">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="54" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#b85450;" edge="1" parent="1" source="47" target="51">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="55" value="Journey Legend" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=11;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="80" y="90" width="300" height="180" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="56" value="LEFT: Quick Install (Experienced User)&#xa;• One-line curl installer&#xa;• TUI wizard&#xa;• 5-10 minutes" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=9;spacingLeft=10;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="90" y="120" width="280" height="40" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="57" value="CENTER: Custom Agent Creation&#xa;• scaffold-agent command&#xa;• Edit identity files&#xa;• Regenerate context" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=9;spacingLeft=10;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="90" y="170" width="280" height="40" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="58" value="RIGHT: Manual Install (First-time User)&#xa;• Git clone&#xa;• Read documentation&#xa;• Manual setup&#xa;• 15-30 minutes" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=9;spacingLeft=10;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="90" y="220" width="280" height="40" as="geometry"/>
+        </mxCell>
+        
+        <!-- Time Estimates -->
+        <mxCell id="59" value="~5 min" style="text;html=1;strokeColor=none;fillColor=#ffe6cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=9;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="460" y="355" width="60" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="60" value="~15 min" style="text;html=1;strokeColor=none;fillColor=#ffe6cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=9;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="860" y="355" width="60" height="20" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="61" value="~3 min" style="text;html=1;strokeColor=none;fillColor=#ffe6cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=9;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="490" y="615" width="50" height="20" as="geometry"/>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

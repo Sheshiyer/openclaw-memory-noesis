@@ -1,1 +1,0 @@
-memory/kernel/AGENTS.md
